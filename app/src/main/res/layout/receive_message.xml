@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="start|bottom">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/recivechat_bubble_rectangle"
+        android:layout_marginTop="5dp"
+
+        >
+
+
+
+        <TextView
+            android:id="@+id/textViewMessageRecieved"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="2dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:maxWidth="300dp"
+            android:text="Hi, How are you?"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:layout_marginTop="5dp"
+            android:minWidth="70dp"
+            />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="start"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="15dp">
+
+    <TextView
+        android:id="@+id/textViewRecieveStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:textSize="10dp"
+            android:textColor="@color/white"
+            android:layout_gravity="start"
+            android:layout_marginStart="5dp"
+        android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/textViewRecievedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textSize="10dp"
+            android:textColor="@color/white"
+            android:layout_gravity="start"
+            android:layout_marginStart="5dp"
+            />
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,71 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.example.letschat'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.letschat"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        dataBinding{
+            enabled = true;
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    implementation 'com.google.firebase:firebase-auth:21.1.0'
+    implementation 'com.google.firebase:firebase-database:20.1.0'
+    implementation 'com.google.firebase:firebase-storage:20.1.0'
+    implementation platform('com.google.firebase:firebase-bom:31.0.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+    //below dependencies use for play gif
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
+    //    below dependencies use for bottom navigation
+    implementation 'com.etebarian:meow-bottom-navigation:1.2.0' //dont app this dependencies it not works properly it's new version not works properly
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.20'
+    //circle image view
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    // custom progress dialog
+    implementation 'com.github.basusingh:BeautifulProgressDialog:1.001'
+    //picasso for image load
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //paper db
+    implementation 'io.github.pilgr:paperdb:2.7.2'
+
+    //status
+    implementation 'com.github.3llomi:CircularStatusView:V1.0.3'
+
+    //storyview
+    implementation 'com.github.OMARIHAMZA:StoryView:1.0.2-alpha'
+}

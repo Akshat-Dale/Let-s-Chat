@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragment.HelpBottomSheetFragment"
+    android:background="@drawable/bottom_sheet_shape">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="50dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#BEBEBE"
+        android:elevation="6dp"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textViewAppName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/cardView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="15dp"
+        android:text="@string/app_name"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="25sp"
+        android:textColor="#585858"/>
+
+    <TextView
+        android:id="@+id/textViewHelpSheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/textViewAppName"
+        app:layout_constraintRight_toRightOf="@id/textViewAppName"
+        app:layout_constraintTop_toBottomOf="@id/textViewAppName"
+        android:layout_marginTop="8dp"
+        android:text="Help"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="20sp"
+        android:textColor="#585858"/>
+
+
+    <EditText
+        android:id="@+id/editTextHelpMessage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewHelpSheet"
+        app:layout_constraintLeft_toLeftOf="@id/textViewHelpSheet"
+        app:layout_constraintRight_toRightOf="@id/textViewHelpSheet"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/edittext_typing_background"
+        android:hint="Write a message......"
+        android:gravity="start"
+        android:padding="8dp"
+        android:layout_marginTop="10dp"/>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonSendHelpMessage"
+        android:layout_width="160dp"
+        android:layout_height="45dp"
+        android:background="@drawable/button_log_sign"
+        app:layout_constraintTop_toBottomOf="@id/editTextHelpMessage"
+        app:layout_constraintLeft_toLeftOf="@id/editTextHelpMessage"
+        app:layout_constraintRight_toRightOf="@id/editTextHelpMessage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:textColor="@color/white"
+        android:text="Send"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

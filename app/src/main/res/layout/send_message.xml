@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:layout_gravity="end|bottom">
+
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+    android:orientation="vertical"
+      android:background="@drawable/sendchat_bubble_rectangle"
+    android:layout_alignParentEnd="true"
+    android:layout_marginTop="5dp"
+      >
+
+
+
+  <TextView
+      android:id="@+id/textViewMessageSend"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:lineSpacingExtra="2dp"
+      android:paddingLeft="10dp"
+      android:paddingRight="20dp"
+      android:maxWidth="300dp"
+      android:text="Hi, How are you?"
+      android:textColor="@color/black"
+      android:textSize="16dp"
+      android:minWidth="70dp"
+      android:layout_marginTop="5dp"
+    />
+
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+  android:orientation="horizontal"
+    android:layout_gravity="end"
+    android:layout_marginBottom="4dp"
+    android:layout_marginEnd="15dp">
+
+
+  <TextView
+      android:id="@+id/textViewTimeSend"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="time"
+      android:textSize="10dp"
+      android:textColor="@color/black"
+      android:layout_gravity="end"
+      android:layout_marginEnd="5dp"
+      />
+
+  <TextView
+      android:id="@+id/textViewSendStatus"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Status"
+      android:textSize="10dp"
+      android:textColor="@color/black"
+      android:layout_gravity="end"
+      android:layout_marginEnd="2dp"
+      android:visibility="gone"
+      />
+</LinearLayout>
+
+  </LinearLayout>
+
+
+</RelativeLayout>
