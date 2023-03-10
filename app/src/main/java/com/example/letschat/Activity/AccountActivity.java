@@ -50,6 +50,7 @@ public class AccountActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     BeautifulProgressDialog customProgressDialog;
     ProgressBar progressBarCircleImage;
+    UserDetail userDetail1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,39 @@ public class AccountActivity extends AppCompatActivity {
 
                 Intent intent =new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                 startActivityForResult(intent,SELECT_PICTURE);
+            }
+        });
+
+
+        buttonConfirmAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customProgressDialog.show();
+                Toast.makeText(AccountActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+                String name = editTextNameAccount.getText().toString();
+                String bio = editTextBioAccount.getText().toString();
+
+
+                HashMap<String, String> hashMap = new HashMap<>();
+                if (!name.isEmpty() && !bio.isEmpty() ) {
+                    hashMap.put("userName", name);
+                    hashMap.put("userBio", bio);
+                    hashMap.put("userImage", userDetail1.getUserImage());
+                    hashMap.put("authenticationType", userDetail1.getAuthenticationType());
+                    hashMap.put("email", userDetail1.getEmail());
+                    hashMap.put("password", userDetail1.getPassword());
+
+                }
+
+
+                firebaseDatabase.getReference().child("UserAuthentication").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
+                        .setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                customProgressDialog.dismiss();
+                                Toast.makeText(AccountActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
     }
@@ -127,30 +161,7 @@ public class AccountActivity extends AppCompatActivity {
 
 
 //        update details
-        buttonConfirmAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String name = editTextNameAccount.getText().toString();
-                String bio = editTextBioAccount.getText().toString();
-                String email = editTextEmailAccount.getText().toString();
 
-
-                HashMap<String, String> hashMap = new HashMap<>();
-                if (!name.isEmpty() && !bio.isEmpty() && !email.isEmpty()) {
-                    hashMap.put("userName", name);
-                    hashMap.put("userBio", bio);
-                }
-
-
-                firebaseDatabase.getReference().child("UserAuthentication").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
-                        .setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(AccountActivity.this, "Updated", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });
     }
 
     public void setDetailsOnText(){
@@ -158,19 +169,19 @@ public class AccountActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        UserDetail userDetail = snapshot.getValue(UserDetail.class);
-                        if (userDetail != null) {
-                            Picasso.get().load(userDetail.getUserImage()).placeholder(R.drawable.user_imageicon).into(circleImageAccount);
-                            editTextBioAccount.setText(userDetail.getUserBio());
-                            editTextNameAccount.setText(userDetail.getUserName());
-                            editTextEmailAccount.setText(userDetail.getEmail());
+                         userDetail1 = snapshot.getValue(UserDetail.class);
+                        if (userDetail1 != null) {
+                            Picasso.get().load(userDetail1.getUserImage()).placeholder(R.drawable.user_imageicon).into(circleImageAccount);
+                            editTextBioAccount.setText(userDetail1.getUserBio());
+                            editTextNameAccount.setText(userDetail1.getUserName());
+                            editTextEmailAccount.setText(userDetail1.getEmail());
 
-                            String bio = userDetail.getUserBio();
+                            String bio = userDetail1.getUserBio();
                             if (bio==null || bio.isEmpty()) {
                                 editTextBioAccount.setText("Bio not Available");
 
                             } else {
-                                editTextBioAccount.setText(userDetail.getUserBio());
+                                editTextBioAccount.setText(userDetail1.getUserBio());
                             }
 
                         }
