@@ -50,7 +50,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
 
         UserStatus userStatus = statusArrayList.get(position);
         holder.itemStatusBinding.userNameStausTV.setText(userStatus.getUserName());
-        holder.itemStatusBinding.lastUpdateStatusTV.setText(userStatus.getLastUpdated());
+        holder.itemStatusBinding.lastUpdateStatusTV.setText("Last Updated "+userStatus.getLastUpdated());
         Picasso.get().load(userStatus.getProfileImage()).placeholder(R.drawable.user_imageicon).into(holder.itemStatusBinding.circleImageStatus);
 
 //        Status lastStatus = userStatus.getStatusArrayList().get(userStatus.getStatusArrayList().size()-1);
