@@ -4,18 +4,19 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
+import com.example.letschat.*;
 import com.example.letschat.Adapters.StatusAdapter;
 import com.example.letschat.Models.Status;
 import com.example.letschat.Models.UserDetail;
@@ -26,7 +27,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -94,10 +94,16 @@ public class StorieFragment extends Fragment {
         floatButtonAddStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addStatus();
+                addImageStatus();
             }
         });
 
+        try {
+            removeStatusAfter24Hours();
+        }
+        catch (Exception e){
+            Toast.makeText(view.getContext(), "Crash while getting status", Toast.LENGTH_SHORT).show();
+        }
 
         getStatus();
         firebaseDatabase.getReference("UserAuthentication").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
@@ -118,6 +124,39 @@ public class StorieFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void removeStatusAfter24Hours() {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        Date dateee = new Date();
+        String date = formatter.format(dateee);
+
+
+        firebaseDatabase.getReference().child("stories").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
+                .child("Status").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for (DataSnapshot snapshot1 :snapshot.getChildren()) {
+                            Status status = snapshot1.getValue(Status.class);
+                            String key = snapshot1.getKey();
+
+                            if (date.equals(status.getTimeStamp())){
+                                firebaseDatabase.getReference().child("stories").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
+                                        .child("Status").child(Objects.requireNonNull(key)).removeValue();
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
     }
 
     private void getStatus() {
@@ -180,7 +219,7 @@ public class StorieFragment extends Fragment {
         });
     }
 
-    private void addStatus() {
+    private void addImageStatus() {
 
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -188,57 +227,66 @@ public class StorieFragment extends Fragment {
         startActivityForResult(intent,10);
     }
 
+
+    public void uploadStatus(Intent data){
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        Date dateee = new Date();
+        String date = formatter.format(dateee);
+
+        progressDialog.show();
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReference = firebaseStorage.getReference().child("Status").child(date+"");
+        storageReference.putFile(data.getData()).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                if (task.isSuccessful()){
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+
+
+                            UserStatus userStatus = new UserStatus();
+                            userStatus.setUserName(userDetail.getUserName());
+                            userStatus.setProfileImage(userDetail.getUserImage());
+                            userStatus.setLastUpdated(date);
+
+                            HashMap<String,Object> hashMap = new HashMap<>();
+                            hashMap.put("userName",userStatus.getUserName());
+                            hashMap.put("profileImage",userStatus.getProfileImage());
+                            hashMap.put("lastUpdated",userStatus.getLastUpdated());
+
+
+                            Status status = new Status(uri.toString(),userStatus.getLastUpdated());
+
+
+                            firebaseDatabase.getReference().child("stories").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
+                                    .updateChildren(hashMap);
+
+                            firebaseDatabase.getReference().child("stories").child(FirebaseAuth.getInstance().getUid())
+                                    .child("Status").push().setValue(status);
+
+                            progressDialog.dismiss();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-        Date dateee = new Date();
-        String date = formatter.format(dateee);
 
         if (data!=null){
 
             if (requestCode==10){
 
-                progressDialog.show();
-                FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-                StorageReference storageReference = firebaseStorage.getReference().child("Status").child(date+"");
-                storageReference.putFile(data.getData()).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                uploadStatus(data);
 
-                        if (task.isSuccessful()){
-                            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-
-
-                                    UserStatus userStatus = new UserStatus();
-                                    userStatus.setUserName(userDetail.getUserName());
-                                    userStatus.setProfileImage(userDetail.getUserImage());
-                                    userStatus.setLastUpdated(date);
-
-                                    HashMap<String,Object> hashMap = new HashMap<>();
-                                    hashMap.put("userName",userStatus.getUserName());
-                                    hashMap.put("profileImage",userStatus.getProfileImage());
-                                    hashMap.put("lastUpdated",userStatus.getLastUpdated());
-
-
-                                    Status status = new Status(uri.toString(),userStatus.getLastUpdated());
-
-
-                                    firebaseDatabase.getReference().child("stories").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
-                                            .updateChildren(hashMap);
-
-                                    firebaseDatabase.getReference().child("stories").child(FirebaseAuth.getInstance().getUid())
-                                                    .child("Status").push().setValue(status);
-
-                                    progressDialog.dismiss();
-                                }
-                            });
-                        }
-                    }
-                });
             }
         }
     }
