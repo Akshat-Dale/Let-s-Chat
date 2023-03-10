@@ -142,7 +142,7 @@ public class StorieFragment extends Fragment {
                             Status status = snapshot1.getValue(Status.class);
                             String key = snapshot1.getKey();
 
-                            if (date.equals(status.getTimeStamp())){
+                            if (date.equals(Objects.requireNonNull(status).getTimeStamp())){
                                 firebaseDatabase.getReference().child("stories").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()))
                                         .child("Status").child(Objects.requireNonNull(key)).removeValue();
                             }
@@ -155,8 +155,6 @@ public class StorieFragment extends Fragment {
 
                     }
                 });
-
-
     }
 
     private void getStatus() {
