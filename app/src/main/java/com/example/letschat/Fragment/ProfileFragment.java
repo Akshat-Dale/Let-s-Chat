@@ -48,6 +48,7 @@ public class ProfileFragment extends Fragment {
 
         intializeVariables();
 
+        Paper.init(view.getContext());
         UserDetail userDetail = Paper.book().read("UserDetail");
         String userImage = Paper.book().read("UserImage");
 
